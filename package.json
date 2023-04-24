@@ -1,0 +1,8 @@
+{
+  "name": "com.cf.Utilities",
+  "displayName": "TheGoodplaceUtils",
+  "version": "0.1.0",
+  "unity": "2020.2",
+  "description": "Provides some helpers for Furioos and a basic dev console.\nImport the Integration scene sample, modify it to your needs.\n\nDepends on FurioosSDK (1.1), Tweenables",
+  "category": "CueDXP Framework"
+}
