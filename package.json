@@ -3,6 +3,9 @@
   "displayName": "TheGoodplaceUtils",
   "version": "0.1.0",
   "unity": "2020.2",
-  "description": "",
+   "description": "Depends on DG.Dotween \nhttp://www.demigiant.com/",
+  "dependencies": {
+    "com.unity.textmeshpro": "3.0.6"
+  },
   "category": "Helpers"
 }

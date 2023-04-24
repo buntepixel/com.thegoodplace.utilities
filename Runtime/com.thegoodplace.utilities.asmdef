@@ -1,7 +1,10 @@
 {
     "name": "com.thegoodplace.utilities",
     "rootNamespace": "cf",
-    "references": [],
+    "references": [
+        "Unity.TextMeshPro",
+		"DOTween.Modules"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
