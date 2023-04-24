@@ -1,7 +1,7 @@
 
 using UnityEngine;
 using UnityEngine.Events;
-namespace Cf.Utilities.Ui {
+namespace TGP.Utilities.Ui {
 	public class SwipeElem : BaseSwipeElem {
 
 		public TouchManager.TouchDirection InSwipe;

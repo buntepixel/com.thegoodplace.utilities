@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-namespace Cf.Utilities {
+namespace TGP.Utilities {
 
-	static  class ClassExtensions  {
+	static public class ClassExtensions  {
         public static bool EqualSequence(this int[] arr, int[] value) {
             return arr.SequenceEqual(value);
 			}

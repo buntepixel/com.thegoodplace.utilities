@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-namespace Cf.Utilities.Ui {
+namespace TGP.Utilities.Ui {
 
 	public abstract class BaseSwipeElem : BaseMonoBehaviour {
 

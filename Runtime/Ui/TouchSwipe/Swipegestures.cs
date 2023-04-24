@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Cf.Utilities;
+using TGP.Utilities;
 
 
-namespace Cf.Utilities.Ui{
+namespace TGP.Utilities.Ui{
 
 	[RequireComponent(typeof(TouchManager))]
 	public class Swipegestures : BaseMonoBehaviour {

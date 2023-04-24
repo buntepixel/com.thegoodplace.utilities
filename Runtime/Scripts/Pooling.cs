@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Cf.Utilities {
+namespace TGP.Utilities {
 	public interface IPooling<T> where T : class {
 		T GetItem(Transform parent);
 		void AddItem(T item);

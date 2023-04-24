@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 using TMPro;
 using DG.Tweening;
 
-namespace Cf.Utilities.Ui {
+namespace TGP.Utilities.Ui {
     public class DialogueWindowInfo : DialogueWindowBase {
 		public delegate void DialogueWindow_delegate(System.Object sender, DialogueWindowBaseEventArgs context);
 		public static DialogueWindow_delegate OnOpenDialogueWindow;

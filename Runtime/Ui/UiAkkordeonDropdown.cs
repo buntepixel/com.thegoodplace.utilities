@@ -8,7 +8,7 @@ using TMPro;
 
 
 
-namespace Cf.Utilities.Ui {
+namespace TGP.Utilities.Ui {
 	public class UiAkkordeonDropdown : BaseMonoBehaviour, IPointerClickHandler, ISubmitHandler, ICancelHandler {
 		protected internal class DropdownItem : BaseMonoBehaviour, IPointerClickHandler {
 

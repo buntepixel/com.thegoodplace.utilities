@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Cf.Utilities;
-using Cf.Utilities.Ui;
+using TGP.Utilities;
+using TGP.Utilities.Ui;
 
 public class test : MonoBehaviour {
 	public GameObject parent;

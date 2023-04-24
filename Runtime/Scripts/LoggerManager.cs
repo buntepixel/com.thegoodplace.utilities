@@ -8,7 +8,7 @@ using System.Globalization;
 
 
 
-namespace Cf.Utilities {
+namespace TGP.Utilities {
 	public class LoggerManager : BaseMonoBehaviour {
 		Logger logger;
 		private void Awake() {

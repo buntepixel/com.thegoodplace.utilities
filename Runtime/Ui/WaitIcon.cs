@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Cf.Utilities.Ui {
+namespace TGP.Utilities.Ui {
 
 	public class WaitIcon : MonoBehaviour {
 		public delegate void WaitIcon_delegate(System.Object sender, WaitIconEventArgs args);

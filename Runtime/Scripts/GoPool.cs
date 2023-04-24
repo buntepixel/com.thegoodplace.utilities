@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Cf.Utilities {
+namespace TGP.Utilities {
 	public class GoPool : BasePool<GameObject> {
 		GameObject poolObj;
 		GameObject instanceObj;

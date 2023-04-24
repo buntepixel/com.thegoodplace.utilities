@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Cf.Utilities.Ui {
+namespace TGP.Utilities.Ui {
 
 	public class TabToNextGUIElement : MonoBehaviour {
 		public List<Selectable> elements;   // add UI elements in inspector in desired tabbing order

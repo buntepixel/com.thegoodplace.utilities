@@ -7,10 +7,10 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 using DG.Tweening;
-using Cf.Utilities;
+using TGP.Utilities;
 
 
-namespace Cf.Utilities.Ui {
+namespace TGP.Utilities.Ui {
 	[RequireComponent(typeof(CanvasGroup))]
 	public abstract class DialogueWindowBase : BaseMonoBehaviour {
 		public enum AnimationType {

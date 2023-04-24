@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Linq;
-using Cf.Utilities;
+using TGP.Utilities;
 
-namespace Cf.Utilities.Ui{
+namespace TGP.Utilities.Ui{
 
 
 	public class TouchManager : BaseMonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler {

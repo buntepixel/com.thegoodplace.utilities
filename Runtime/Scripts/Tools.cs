@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Cf.Utilities {
+namespace TGP.Utilities {
     public static class Tools {
 
         /// <summary>

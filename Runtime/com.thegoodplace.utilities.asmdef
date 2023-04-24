@@ -1,6 +1,6 @@
 {
     "name": "com.thegoodplace.utilities",
-    "rootNamespace": "Cf",
+    "rootNamespace": "TGP",
     "references": [
         "Unity.TextMeshPro",
         "DOTween.Modules"

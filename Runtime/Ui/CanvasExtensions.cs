@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace Cf.Utilities {
-   static class CanvasExtensions {
+namespace TGP.Utilities {
+   static public class CanvasExtensions {
         /// <summary>
         /// bool activates interactable and blockraycast in one go
         /// </summary>
