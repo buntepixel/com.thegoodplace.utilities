@@ -1,6 +1,6 @@
 {
   "name": "com.thegoodplace.utilities",
-  "displayName": "TheGoodplaceUtils",
+  "displayName": "TGPUtilities",
   "version": "0.1.0",
   "unity": "2020.2",
    "description": "Depends on DG.Dotween \nhttp://www.demigiant.com/",
