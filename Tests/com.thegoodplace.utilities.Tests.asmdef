@@ -1,9 +1,8 @@
 {
-    "name": "com.thegoodplace.utilities",
-    "rootNamespace": "TGP.Utilities",
+    "name": "com.thegoodplace.utilities.Tests",
+    "rootNamespace": "TGP",
     "references": [
-        "Unity.TextMeshPro",
-        "DOTween.Modules"
+        "com.thegoodplace.utilities"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
