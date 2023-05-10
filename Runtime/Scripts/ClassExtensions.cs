@@ -8,11 +8,7 @@ using UnityEngine.EventSystems;
 namespace TGP.Utilities {
 
 	static public class ClassExtensions  {
-        public static bool EqualSequence(this int[] arr, int[] value) {
-            return arr.SequenceEqual(value);
-			}
-
-
+       
         public static byte[] GetBytesFromStream(Stream input) {
             using (MemoryStream ms = new MemoryStream()) {
                 input.CopyTo(ms);
