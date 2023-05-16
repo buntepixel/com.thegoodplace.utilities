@@ -1,0 +1,16 @@
+{
+    "name": "com.thegoodplace.UtilitiesEditor",
+    "rootNamespace": "TGP.Utilities.Editor",
+    "references": [
+        "GUID:0897aa9d4616de340a3682425547d7c0"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
