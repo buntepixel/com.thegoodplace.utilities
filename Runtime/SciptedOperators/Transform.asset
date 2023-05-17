@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9af39392996c2604a9b8799a7351f072, type: 3}
   m_Name: Transform
   m_EditorClassIdentifier: 
-  Postion: {fileID: 0}
-  Rotation: {fileID: 0}
-  Scale: {fileID: 0}
+  Settings: {fileID: 11400000, guid: ecd19e6f6664f764abb3ed5c06c6f5b9, type: 2}
+  Position: {x: 0, y: 0, z: 0}
+  Rotation: {x: 90, y: 0, z: 0}
+  Scale: {x: 2, y: 2, z: 2}
+  Pos: 1
+  Rot: 0
+  Scl: 0

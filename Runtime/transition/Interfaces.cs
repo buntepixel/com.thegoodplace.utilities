@@ -1,15 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 namespace TGP.Utilities {
 	public interface ITransition {
 		TransitionState CurrState { get; }
 		void TransitionIn();
 		void TransitionOut();
-		
-		
-
 	}
 	public interface ICancelableTransition:ITransition {
 		void CancelTransition(CancelBehaviour behaviour);
