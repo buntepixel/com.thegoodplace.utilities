@@ -1,5 +1,5 @@
 {
-    "name": "com.thegoodplace.utilities",
+    "name": "com.thegoodplace.Utilities",
     "rootNamespace": "TGP.Utilities",
     "references": [
         "Unity.TextMeshPro",

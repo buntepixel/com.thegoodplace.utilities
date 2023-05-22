@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using TGP.Utilities;
+
 using DG.Tweening;
 
+
 namespace TGP.Utilities {
-	public abstract class BaseTransition2 : BaseMonoBehaviour, ICancelableTransition {
+	public abstract class BaseTransition2<T> : BaseMonoBehaviour, ICancelableTransition {
 		[SerializeField]
 		TransitionState _currState;
 		[SerializeField]
 		protected bool startOut = true;
 		public TransitionState CurrState { get { return _currState; } protected set { _currState = value; } }
+
 		[SerializeField]
-		[Expandable]
-		protected TweenableValueSo TweenValue;
+		protected TweenableValueSo<T> TweenValue;
 
 
 		protected bool TransDirIn;
@@ -39,7 +41,6 @@ namespace TGP.Utilities {
 		/// implement your code bevore calling Base
 		/// </summary>
 		public virtual void TransitionIn() {
-			Debug.Log($"TransitionIn");
 			TransDirIn = true;
 			switch (CurrState) {
 				case TransitionState.In:
@@ -81,7 +82,7 @@ namespace TGP.Utilities {
 			//sequence.OnComplete(() => OnTransitionFinished());
 			CurrState = TransitionState.Transition;
 			sequence.Restart();
-			Debug.Log($" isplaying: {sequence.IsPlaying()}   {sequence.IsActive()} ");
+			//Debug.Log($" isplaying: {sequence.IsPlaying()}   {sequence.IsActive()} ");
 		}
 	
 

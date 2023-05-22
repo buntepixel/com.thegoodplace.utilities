@@ -1,8 +1,8 @@
 {
-    "name": "com.thegoodplace.utilities.Tests",
-    "rootNamespace": "TGP",
+    "name": "com.thegoodplace.Utilities.Tests",
+    "rootNamespace": "TGP.Tests",
     "references": [
-        "com.thegoodplace.utilities"
+        "com.thegoodplace.Utilities"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

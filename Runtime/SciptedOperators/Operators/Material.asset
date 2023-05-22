@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f275a9cefd8f654c9217152f4ebab15, type: 3}
+  m_Name: Material
+  m_EditorClassIdentifier: 
+  Settings: {fileID: 0}
+  EndColor: {r: 0, g: 1, b: 1, a: 1}
+  FadeEndVal: 1
+  Tiling: {x: 1, y: 1}
+  Offset: {x: 0, y: 0}
+  FloatParam: []
+  color: 0
+  fade: 0
+  tiling: 0
+  offset: 0
+  customParam: 0

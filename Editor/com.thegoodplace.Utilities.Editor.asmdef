@@ -1,8 +1,8 @@
 {
-    "name": "com.thegoodplace.UtilitiesEditor",
+    "name": "com.thegoodplace.Utilities.Editor",
     "rootNamespace": "TGP.Utilities.Editor",
     "references": [
-        "GUID:0897aa9d4616de340a3682425547d7c0"
+        "com.thegoodplace.Utilities"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

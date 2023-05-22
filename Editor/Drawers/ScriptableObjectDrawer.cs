@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace TGP.StateFramework.EditorS {
+namespace TGP.Utilities.Editor {
 
 
     //https://forum.unity.com/threads/editor-tool-better-scriptableobject-inspector-editing.484393/
     [CustomPropertyDrawer(typeof(ScriptableObject), true)]
     public class ScriptableObjectDrawer : PropertyDrawer {
         // Cached scriptable object editor
-        Editor editor = null;
+       UnityEditor.Editor editor = null;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
             // Draw label
@@ -29,7 +29,7 @@ namespace TGP.StateFramework.EditorS {
                 GUILayout.BeginVertical("box");
 
                 if (!editor)
-                    Editor.CreateCachedEditor(property.objectReferenceValue, null, ref editor);
+                    UnityEditor.Editor.CreateCachedEditor(property.objectReferenceValue, null, ref editor);
 
                 // Draw object properties
                 EditorGUI.BeginChangeCheck();

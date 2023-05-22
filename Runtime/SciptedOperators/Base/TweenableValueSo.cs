@@ -7,10 +7,10 @@ using DG.Tweening;
 
 namespace TGP.Utilities
 {
-    public abstract class TweenableValueSo : ScriptableObject
+    public abstract class TweenableValueSo<T> : ScriptableObject
     {
         [Expandable]
         public TweenableSettingsSO Settings;
-        public abstract Sequence GetTweenSequence(Transform transform, TweenCallback onComplete, bool isIn = true);
+        public abstract Sequence GetTweenSequence(T value, TweenCallback onComplete, bool isIn = true);
     }
 }

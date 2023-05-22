@@ -8,7 +8,8 @@ using DG.Tweening;
 namespace TGP.Utilities {
 	[CreateAssetMenu(fileName = "Transform", menuName = "ScriptableObjects/Tweenables/Values/Transform", order = 1)]
 
-	public class TransformSO : TweenableValueSo {
+	public class TransformSO : TweenableValueSo<Transform> {
+		TransformSO() { }
 		public Vector3 OutPosition;
 		public Vector3 OutRotation;
 		public Vector3 OutScale= Vector3.one;
