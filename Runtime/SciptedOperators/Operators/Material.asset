@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f275a9cefd8f654c9217152f4ebab15, type: 3}
   m_Name: Material
   m_EditorClassIdentifier: 
-  Settings: {fileID: 0}
-  EndColor: {r: 0, g: 1, b: 1, a: 1}
-  FadeEndVal: 1
-  Tiling: {x: 1, y: 1}
-  Offset: {x: 0, y: 0}
-  FloatParam: []
-  color: 0
-  fade: 0
-  tiling: 0
-  offset: 0
-  customParam: 0
+  Settings: {fileID: 11400000, guid: ecd19e6f6664f764abb3ed5c06c6f5b9, type: 2}
+  Mv:
+    EndColor: {r: 1, g: 0, b: 1, a: 1}
+    FadeEndVal: 0
+    Tiling: {x: 1, y: 1}
+    Offset: {x: 0, y: 0}
+    FloatParam: []
+    color: 0
+    fade: 0
+    tiling: 0
+    offset: 0
+    custParam: 0

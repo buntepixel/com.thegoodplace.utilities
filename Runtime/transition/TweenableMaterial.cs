@@ -11,21 +11,31 @@ namespace TGP.Utilities
 			materials = GetComponent<Renderer>().materials;
 
 			base.Start();
-			
-
 			if (startOut) {
 				MaterialSo mat = TweenValue as MaterialSo;
-				if (mat.color)
-					materials[0].color = mat.EndColor;
-				if (mat.fade)
-					materials[0].color = new Color(materials[0].color.r, materials[0].color.g, materials[0].color.b, mat.FadeEndVal);
-				if (mat.customParam) {
-					foreach(MaterialSo.FloatVal item in mat.FloatParam) {
-						materials[0].SetFloat(item.Property, item.FValue);
-					}
-				}
+				//for(int i = 0;i<mat.Mv.Length;i++)
+				//foreach(MaterialSo.MaterialValueGroup item in mat.Mv) {
+				//	if (item.color)
+				//		materials[i].color =item.EndColor;
+				//	if (item.fade)
+				//		materials[i].color = new Color(materials[0].color.r, materials[0].color.g, materials[0].color.b, item.FadeEndVal);
+				//	if (item.custParam) {
+				//		foreach (MaterialSo.FloatVal val in item.FloatParam) {
+				//			materials[i].SetFloat(val.Property,val.FValue);
+				//		}
+				//	}
+				//}
+				
 			}
 		}
+//#if UNITY_EDITOR
+//		private void OnGUI() {
+//			if (materials.Length==0) {
+//				Debug.Log("hello");
+//				materials = GetComponent<Renderer>().materials;
+//			}
+//		}
+//#endif
 		protected override void SetupSequenc() {
 
 			MaterialSo Material = TweenValue as MaterialSo;
