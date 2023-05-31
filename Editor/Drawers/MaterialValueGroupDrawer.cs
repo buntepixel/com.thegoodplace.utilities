@@ -8,7 +8,7 @@ namespace TGP.Utilities.Editor {
 	[CustomPropertyDrawer(typeof(MaterialValueGroup), true)]
 	public class MaterialValueGroupDrawer : PropertyDrawer {
 
-		string[] valueName = new string[] { "EndColor", "FadeEndVal", "Tiling", "Offset", "FloatParam" };
+		string[] valueName = new string[] { "EndColor", "EndFadeVal", "EndTiling", "EndOffset", "FloatParam" };
 		SerializedProperty[] GetBoolValues(SerializedProperty property) {
 			return new SerializedProperty[] {
 				property.FindPropertyRelative("color"),
@@ -46,10 +46,14 @@ namespace TGP.Utilities.Editor {
 
 			EditorGUIUtility.labelWidth = 100;
 			for (int i = 0; i < bools.Length; i++) {//add all other Value fields if enabled
+				SerializedProperty prop = property.FindPropertyRelative(valueName[i]);
 				if (bools[i].boolValue) {
-					SerializedProperty prop = property.FindPropertyRelative(valueName[i]);
 					EditorGUI.PropertyField(new Rect(position.x, position.y + (EditorGUIUtility.singleLineHeight * counter), position.width, EditorGUI.GetPropertyHeight(prop)), prop, true);
 					counter++;
+				} else {
+					if (prop.isExpanded) {
+						prop.isExpanded = false;
+					}
 				}
 			}
 
@@ -60,20 +64,46 @@ namespace TGP.Utilities.Editor {
 			EditorGUI.EndProperty();
 		}
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
-			float totalHeight = EditorGUIUtility.singleLineHeight;
-			property.NextVisible(true);
-			if (property.type == "bool" && property.boolValue == true)//workaround for first value is colorbool
-				totalHeight += EditorGUIUtility.singleLineHeight;
-			while (property.NextVisible(false)) {
-				Debug.Log($"path: {property.displayName}");
-				if (property.type != "bool") {
-					totalHeight += EditorGUI.GetPropertyHeight(property, true);
-				} else {
-					if (!property.boolValue)
-						totalHeight -= EditorGUIUtility.singleLineHeight;//since the values that dont get drawn seem to be added we need to remove a line for every false bool
+
+			float totalHeight = EditorGUIUtility.singleLineHeight*2;
+			if (property == null)
+				return 0;
+			Debug.Log($"isAray: {property.type} name: {property.displayName}");
+			if (property.hasChildren) {
+				property.NextVisible(true);
+				int counter = 0;
+				int visible = 0;
+				while (property.NextVisible(false)) {
+					if (property.propertyType == SerializedPropertyType.Boolean) {
+						counter++;
+						if (!property.boolValue) {
+							visible++;
+						}
+					}
+					if(property.isExpanded)
+					Debug.Log($"hasChildren: {property.displayName}");
+					totalHeight += EditorGUI.GetPropertyHeight(property);
 				}
-			}
+				totalHeight -= EditorGUIUtility.singleLineHeight * (counter + visible);
+
+			} else
+				Debug.Log($"no: {property.displayName}");
 			return totalHeight;
+
+			//float totalHeight = EditorGUIUtility.singleLineHeight;
+			//property.NextVisible(true);
+			//if (property.type == "bool" && property.boolValue == true)//workaround for first value is colorbool
+			//	totalHeight += EditorGUIUtility.singleLineHeight;
+			//while (property.NextVisible(false)) {
+			//	Debug.Log($"path: {property.displayName}");
+			//	if (property.type != "bool") {
+			//		totalHeight += EditorGUI.GetPropertyHeight(property, true);
+			//	} else {
+			//		if (!property.boolValue)
+			//			totalHeight -= EditorGUIUtility.singleLineHeight;//since the values that dont get drawn seem to be added we need to remove a line for every false bool
+			//	}
+			//}
+			//return totalHeight;
 		}
 	}
 	//[CustomPropertyDrawer(typeof(FloatVal), true)]
