@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,8 @@ namespace TGP.Utilities {
 		[SerializeField]
 		TransitionState _currState;
 		[SerializeField]
+		CancelBehaviour CancelBehaviour;
+		[SerializeField]
 		protected bool startOut = true;
 		public TransitionState CurrState { get { return _currState; } protected set { _currState = value; } }
 
@@ -24,7 +27,7 @@ namespace TGP.Utilities {
 		protected Sequence outSequ;
 		public UnityEvent OnCompletedIn;
 		public UnityEvent OnCompletedOut;
-		
+
 		protected virtual void Start() {
 			if (startOut) {
 				CurrState = TransitionState.Out;
@@ -47,6 +50,9 @@ namespace TGP.Utilities {
 					if (debug)
 						Debug.Log($"BaseTransition---TransitionIn  already IN on Obj: {this.gameObject.name}");
 					break;
+				case TransitionState.Transition:
+					CancelTransition(CancelBehaviour);
+					break;
 				case TransitionState.Out:
 					if (debug)
 						Debug.Log($"BaseTransition---Transitioning In on Obj: {this.gameObject.name}");
@@ -67,7 +73,7 @@ namespace TGP.Utilities {
 					StartTranstion(outSequ);
 					break;
 				case TransitionState.Transition:
-					//OnTransitionCanceled();
+					CancelTransition(CancelBehaviour);
 					break;
 				case TransitionState.Out:
 					if (debug)
@@ -78,13 +84,14 @@ namespace TGP.Utilities {
 			}
 		}
 		void StartTranstion(Sequence sequence) {
-			Debug.Log($"StartTransition");
+			if (debug)
+				Debug.Log($"StartTransition");
 			//sequence.OnComplete(() => OnTransitionFinished());
 			CurrState = TransitionState.Transition;
 			sequence.Restart();
 			//Debug.Log($" isplaying: {sequence.IsPlaying()}   {sequence.IsActive()} ");
 		}
-	
+
 
 		protected void OnTransitionFinished() {
 			TransitionState endState;
@@ -92,45 +99,55 @@ namespace TGP.Utilities {
 			CurrState = endState;
 			if (debug)
 				Debug.LogFormat($"BaseTransition---OnTransitionFinished Finished transiton on Obj: {this.gameObject.name} currState:{endState}  dir: {TransDirIn}");
-
-			//if (TweenQueue.Count != 0) {
-			//	if (debug)
-			//		Debug.LogWarningFormat($" Queue not Empty contains: {TweenQueue.Count} tweens \n clearing Queue");
-			//	TweenQueue.Clear();
-			//}
 			if (TransDirIn) {
-				//inSequ.Rewind();
 				OnCompletedIn?.Invoke();
 			} else {
-				//outSequ.Rewind();
 				OnCompletedOut?.Invoke();
 			}
 		}
+		async Task waitForCompletion(Sequence seq, bool continueTrans = false) {
+			float elapsed = seq.Elapsed();
+			float elapsedDelay = seq.ElapsedDelay();
+			int waittime = 0;
+			if (continueTrans) {
+				waittime = Mathf.FloorToInt(seq.Duration() - elapsed + seq.Delay()-elapsedDelay);
+			} else
+				waittime = Mathf.FloorToInt((elapsed + elapsedDelay) * 1000);
+			await Task.Delay(waittime);
+			return;
+		}
 
-		public void CancelTransition(CancelBehaviour behaviour) {
+		public async void CancelTransition(CancelBehaviour behaviour) {
 			if (debug)
 				Debug.LogWarningFormat($" Canceling current transiton on Obj: {this.gameObject.name}\n Action: {behaviour}");
-			if (behaviour == CancelBehaviour.returnToOrigin) {
-				TransitionState oldState;
-				GetTransEndStateByDir(TransDirIn, out oldState);
-				CurrState = oldState;
-				float perc;
-				Tween curr;
-				List<Tween> tmp = new List<Tween>();
-				//try {
-				//	foreach (Tween item in TweenSequ) {
-				//		perc = item.ElapsedPercentage();
-				//		item.Kill();
-				//		curr = TweenQueue.Dequeue();
-				//		curr.Goto(GetPercDur(perc), true);
-				//		tmp.Add(curr);
-				//	}
-				//} catch (System.InvalidOperationException e) {
-				//	Debug.LogWarning($"BaseTransitionTween---there was a invalid operation. message: {e.Message}");
-				//} finally {
-				//	TweenSequ = tmp;
-				//}
+			CurrState = TransitionState.cancel;
+			TransitionState oldState;
+		
+			switch (behaviour) {
+				case CancelBehaviour.returnToOrigin:
+					GetTransEndStateByDir(TransDirIn, out oldState);
+					if (inSequ.IsPlaying()) {
+						inSequ.Flip();
+						await waitForCompletion(inSequ);
+					} else if (outSequ.IsPlaying()) {
+						outSequ.Flip();
+						await waitForCompletion(outSequ);
+					}
+					CurrState = oldState;
+					break;
+				case CancelBehaviour.continueToEndThenReturn:
+					if (inSequ.IsPlaying()) {
+						await waitForCompletion(inSequ, true);
+						StartTranstion(outSequ);
+					} else if (outSequ.IsPlaying()) {
+						await waitForCompletion(outSequ, true);
+						StartTranstion(inSequ);
+					}
+					break;
+				default:
+					break;
 			}
+			
 		}
 		/// <summary>
 		/// Returns the Endstate based on animationDirection
@@ -140,15 +157,28 @@ namespace TGP.Utilities {
 		/// <returns></returns>
 		bool GetTransEndStateByDir(bool dirIn, out Utilities.TransitionState endState) {
 			bool retVal = false;
-			if (CurrState == TransitionState.Transition) {
-				retVal = true;
-				if (dirIn)
-					endState = TransitionState.In;
-				else
-					endState = TransitionState.Out;
-			} else {
-				endState = CurrState;
+			switch (CurrState) {
+				case TransitionState.Transition:
+				case TransitionState.cancel:
+					retVal = true;
+					if (dirIn)
+						endState = TransitionState.In;
+					else
+						endState = TransitionState.Out;
+					break;
+				default:
+					endState = CurrState;
+					break;
 			}
+			//if (CurrState == TransitionState.Transition) {
+			//	retVal = true;
+			//	if (dirIn)
+			//		endState = TransitionState.In;
+			//	else
+			//		endState = TransitionState.Out;
+			//} else {
+
+			//}
 			return retVal;
 		}
 		//protected float GetPercDur(float perc) {

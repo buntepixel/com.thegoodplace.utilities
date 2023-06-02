@@ -15,10 +15,12 @@ namespace TGP.Utilities {
 	public enum TransitionState {
 		In,
 		Transition,
+		cancel,
 		Out
 	}
 	public enum CancelBehaviour {
 		returnToOrigin,
-		continueToEnd
+		continueToEndThenReturn,
+		ignore
 	}
 }
