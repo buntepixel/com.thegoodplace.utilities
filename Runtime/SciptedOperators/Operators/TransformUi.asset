@@ -9,13 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9af39392996c2604a9b8799a7351f072, type: 3}
-  m_Name: Transform
+  m_Script: {fileID: 11500000, guid: 930548977ab623f4886ed4c3baffc38c, type: 3}
+  m_Name: TransformUi
   m_EditorClassIdentifier: 
   Settings: {fileID: 11400000, guid: ecd19e6f6664f764abb3ed5c06c6f5b9, type: 2}
-  OutPosition: {x: 3, y: 0, z: 0}
-  OutRotation: {x: 0, y: 0, z: 0}
-  OutScale: {x: 2, y: 1, z: 1}
-  Pos: 1
-  Rot: 0
-  Scl: 1
+  rectStore:
+    Position: {x: 588, y: -240.62, z: 0}
+    Width_Height: {x: 200, y: 50}
+    Min: {x: 0, y: 1}
+    Max: {x: 0, y: 1}
+    Pivot: {x: 0.5, y: 0.5}
+    Rotation: {x: 0, y: 0, z: 90}
+    Scale: {x: 1, y: 3, z: 1}

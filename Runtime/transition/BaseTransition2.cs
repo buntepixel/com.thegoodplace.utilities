@@ -1,9 +1,12 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using TGP.Utilities;
+
 
 using DG.Tweening;
 
@@ -16,7 +19,14 @@ namespace TGP.Utilities {
 		CancelBehaviour CancelBehaviour;
 		[SerializeField]
 		protected bool startOut = true;
-		public TransitionState CurrState { get { return _currState; } protected set { _currState = value; } }
+		CancellationTokenSource source = new CancellationTokenSource();
+		CancellationToken token;
+		public TransitionState CurrState {
+			get { return _currState; }
+			protected set {
+				_currState = value; if (debug) Debug.Log($" setting currState to: {value}");
+			}
+		}
 
 		[SerializeField]
 		protected TweenableValueSo<T> TweenValue;
@@ -58,13 +68,16 @@ namespace TGP.Utilities {
 						Debug.Log($"BaseTransition---Transitioning In on Obj: {this.gameObject.name}");
 					StartTranstion(inSequ);
 					break;
+				case TransitionState.cancel:
+					source.Cancel();
+					StartTranstion(inSequ);
+					break;
 			}
 		}
 		/// <summary>
 		/// implement your code bevore calling Base
 		/// </summary>
 		public virtual void TransitionOut() {
-			Debug.Log($"transitionOut");
 			TransDirIn = false;
 			switch (CurrState) {
 				case TransitionState.In:
@@ -79,6 +92,10 @@ namespace TGP.Utilities {
 					if (debug)
 						Debug.Log($"BaseTransition---TransitionOut  already OUT on Obj: {this.gameObject.name}");
 					break;
+				case TransitionState.cancel:
+					source.Cancel();
+					StartTranstion(outSequ);
+					break;
 				default:
 					break;
 			}
@@ -92,7 +109,6 @@ namespace TGP.Utilities {
 			//Debug.Log($" isplaying: {sequence.IsPlaying()}   {sequence.IsActive()} ");
 		}
 
-
 		protected void OnTransitionFinished() {
 			TransitionState endState;
 			GetTransEndStateByDir(TransDirIn, out endState);
@@ -105,16 +121,25 @@ namespace TGP.Utilities {
 				OnCompletedOut?.Invoke();
 			}
 		}
-		async Task waitForCompletion(Sequence seq, bool continueTrans = false) {
+		async Task<bool> waitForCompletion(Sequence seq, CancellationToken token, bool continueTrans = false) {
+			bool isCanced = false;
 			float elapsed = seq.Elapsed();
 			float elapsedDelay = seq.ElapsedDelay();
-			int waittime = 0;
+			int waittime;
 			if (continueTrans) {
-				waittime = Mathf.FloorToInt(seq.Duration() - elapsed + seq.Delay()-elapsedDelay);
+				waittime = Mathf.FloorToInt(seq.Duration() - elapsed + seq.Delay() - elapsedDelay);
 			} else
 				waittime = Mathf.FloorToInt((elapsed + elapsedDelay) * 1000);
-			await Task.Delay(waittime);
-			return;
+			try {
+				await Task.Delay(waittime, token);
+			} catch (TaskCanceledException e) {
+				Debug.LogWarning($"TaskCanceledException {e.Message}");
+			} finally {
+				isCanced = true;
+			}
+
+			Debug.Log($"waitEnd: isCanceled{isCanced}");
+			return isCanced;
 		}
 
 		public async void CancelTransition(CancelBehaviour behaviour) {
@@ -122,32 +147,35 @@ namespace TGP.Utilities {
 				Debug.LogWarningFormat($" Canceling current transiton on Obj: {this.gameObject.name}\n Action: {behaviour}");
 			CurrState = TransitionState.cancel;
 			TransitionState oldState;
-		
+			bool isCanceled = false;
 			switch (behaviour) {
 				case CancelBehaviour.returnToOrigin:
 					GetTransEndStateByDir(TransDirIn, out oldState);
 					if (inSequ.IsPlaying()) {
 						inSequ.Flip();
-						await waitForCompletion(inSequ);
+						isCanceled = await waitForCompletion(inSequ, source.Token);
 					} else if (outSequ.IsPlaying()) {
 						outSequ.Flip();
-						await waitForCompletion(outSequ);
+						isCanceled = await waitForCompletion(outSequ, source.Token);
 					}
-					CurrState = oldState;
+					if (isCanceled)
+						CurrState = TransitionState.cancel;
+					else
+						CurrState = oldState;
 					break;
 				case CancelBehaviour.continueToEndThenReturn:
 					if (inSequ.IsPlaying()) {
-						await waitForCompletion(inSequ, true);
+						isCanceled = await waitForCompletion(inSequ, source.Token, true);
 						StartTranstion(outSequ);
 					} else if (outSequ.IsPlaying()) {
-						await waitForCompletion(outSequ, true);
+						isCanceled = await waitForCompletion(outSequ, source.Token, true);
 						StartTranstion(inSequ);
 					}
 					break;
 				default:
 					break;
 			}
-			
+
 		}
 		/// <summary>
 		/// Returns the Endstate based on animationDirection

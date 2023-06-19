@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InEaseCurve: 8
   OutEaseCurve: 9
-  InDuration: 1
-  OutDuration: 1
+  InDuration: 2
+  OutDuration: 2
   InDelay: 0
   OutDelay: 0

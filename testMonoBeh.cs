@@ -5,8 +5,8 @@ using UnityEngine;
 namespace TGP.Utilities {
 	public class testMonoBeh : MonoBehaviour {
 
-		[SerializeField]
-		EnumDataContainer<CustomClass, TextStyle>[] Container;
+		//[SerializeField]
+		//EnumDataContainer<CustomClass, TextStyle>[] Container;
 		[SerializeField]
 		MaterialValueGroup[] group;
 	}

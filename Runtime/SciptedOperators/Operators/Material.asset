@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Material
   m_EditorClassIdentifier: 
   Settings: {fileID: 11400000, guid: ecd19e6f6664f764abb3ed5c06c6f5b9, type: 2}
-  Mv:
-    EndColor: {r: 1, g: 0, b: 1, a: 1}
-    FadeEndVal: 0
-    Tiling: {x: 1, y: 1}
-    Offset: {x: 0, y: 0}
-    FloatParam: []
-    color: 0
-    fade: 0
+  MaterialValues:
+  - color: 0
+    fade: 1
     tiling: 0
     offset: 0
     custParam: 0
+    EndColor: {r: 1, g: 0, b: 1, a: 1}
+    EndFadeVal: 0
+    EndTiling: {x: 1, y: 1}
+    EndOffset: {x: 0, y: 0}
+    FloatParam: []
