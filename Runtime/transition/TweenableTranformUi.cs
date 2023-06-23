@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace TGP.Utilities {
 	[RequireComponent(typeof(RectTransform))]
-	public class TweenableTranformUi : BaseTransition2<RectTransform> {
+	public class TweenableTranformUi : BaseTransition<RectTransform> {
 		TransformUiSO tranVal;
 		RectTransform rect;
 		RectTransformStore rectOri;

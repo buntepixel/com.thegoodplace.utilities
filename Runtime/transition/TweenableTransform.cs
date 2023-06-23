@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace TGP.Utilities {
-	public class TweenableTransform : BaseTransition2<Transform> {
+	public class TweenableTransform : BaseTransition<Transform> {
 		protected override void Start() {
 			base.Start();
 			if (startOut) {

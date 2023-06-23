@@ -3,8 +3,7 @@
     "rootNamespace": "TGP.Utilities",
     "references": [
         "Unity.TextMeshPro",
-        "DOTween.Modules",
-        "PiRho.Utilities.Runtime"
+        "DOTween.Modules"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

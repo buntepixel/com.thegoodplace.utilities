@@ -2,7 +2,7 @@
     "name": "com.thegoodplace.Utilities.Tests",
     "rootNamespace": "TGP.Tests",
     "references": [
-        "com.thegoodplace.Utilities"
+        "GUID:0897aa9d4616de340a3682425547d7c0"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

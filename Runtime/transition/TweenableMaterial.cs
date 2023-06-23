@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace TGP.Utilities {
-	public class TweenableMaterial : BaseTransition2<Material> {
+	public class TweenableMaterial : BaseTransition<Material> {
 		public Material[] materials;
 
 		protected override void Start() {
