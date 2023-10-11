@@ -13,14 +13,16 @@ MonoBehaviour:
   m_Name: Material
   m_EditorClassIdentifier: 
   Settings: {fileID: 11400000, guid: ecd19e6f6664f764abb3ed5c06c6f5b9, type: 2}
-  MaterialValues:
-  - color: 0
+  MaterialValue:
+    color: 1
     fade: 1
-    tiling: 0
-    offset: 0
+    tiling: 1
+    offset: 1
     custParam: 0
-    EndColor: {r: 1, g: 0, b: 1, a: 1}
+    EndColor: {r: 0.07541527, g: 0.9339623, b: 0.04111775, a: 1}
     EndFadeVal: 0
-    EndTiling: {x: 1, y: 1}
-    EndOffset: {x: 0, y: 0}
-    FloatParam: []
+    EndTiling: {x: 5, y: 3}
+    EndOffset: {x: 2, y: 4}
+    FloatParam:
+    - FValue: 0.2
+      Property: _SpecularHightlights

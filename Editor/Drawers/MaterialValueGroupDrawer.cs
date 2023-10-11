@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.Linq;
 using TGP.Utilities;
+using System.Text.RegularExpressions;
 
 namespace TGP.Utilities.Editor {
-	[CustomPropertyDrawer(typeof(MaterialValueGroup), true)]
+	//[CustomPropertyDrawer(typeof(MaterialValueGroup), true)]
 	public class MaterialValueGroupDrawer : PropertyDrawer {
 
 		string[] valueName = new string[] { "EndColor", "EndFadeVal", "EndTiling", "EndOffset", "FloatParam" };
@@ -18,7 +20,7 @@ namespace TGP.Utilities.Editor {
 				property.FindPropertyRelative("custParam")
 		};
 		}
-	
+
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
 			EditorGUI.BeginProperty(position, label, property);
 
@@ -60,51 +62,47 @@ namespace TGP.Utilities.Editor {
 			// Set labelWidth/indent back to what it was
 			EditorGUIUtility.labelWidth = labelWidth;
 			EditorGUI.indentLevel = indent;
-
+			
 			EditorGUI.EndProperty();
+		
 		}
-		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
+		//public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
 
-			float totalHeight = EditorGUIUtility.singleLineHeight*2;
-			if (property == null)
-				return 0;
-			Debug.Log($"isAray: {property.type} name: {property.displayName}");
-			if (property.hasChildren) {
-				property.NextVisible(true);
-				int counter = 0;
-				int visible = 0;
-				while (property.NextVisible(false)) {
-					if (property.propertyType == SerializedPropertyType.Boolean) {
-						counter++;
-						if (!property.boolValue) {
-							visible++;
-						}
-					}
-					if(property.isExpanded)
-					Debug.Log($"hasChildren: {property.displayName}");
-					totalHeight += EditorGUI.GetPropertyHeight(property);
-				}
-				totalHeight -= EditorGUIUtility.singleLineHeight * (counter + visible);
+		//	float totalHeight = EditorGUIUtility.singleLineHeight * 2;
+		
+		//	if (property == null)
+		//		return 0;
+		//	if (!property.isExpanded)
+		//		return totalHeight;
+		//	//string[] path = property.propertyPath.Split('.');
+		//	//string pattern = @"[\[]+\d+[\]]";
+		//	//Match match = Regex.Match(path[path.Length - 1], pattern);
+		//	//if (match.Success) {
 
-			} else
-				Debug.Log($"no: {property.displayName}");
-			return totalHeight;
+		//	//}
 
-			//float totalHeight = EditorGUIUtility.singleLineHeight;
-			//property.NextVisible(true);
-			//if (property.type == "bool" && property.boolValue == true)//workaround for first value is colorbool
-			//	totalHeight += EditorGUIUtility.singleLineHeight;
-			//while (property.NextVisible(false)) {
-			//	Debug.Log($"path: {property.displayName}");
-			//	if (property.type != "bool") {
-			//		totalHeight += EditorGUI.GetPropertyHeight(property, true);
-			//	} else {
-			//		if (!property.boolValue)
-			//			totalHeight -= EditorGUIUtility.singleLineHeight;//since the values that dont get drawn seem to be added we need to remove a line for every false bool
-			//	}
-			//}
-			//return totalHeight;
-		}
+		//	if (property.hasChildren) {
+		//		property.NextVisible(true);
+		//		int counter = 0;
+		//		int visible = 0;
+		//		while (property.NextVisible(false)) {
+		//			if (property.propertyType == SerializedPropertyType.Boolean) {
+		//				counter++;
+		//				if (!property.boolValue) {
+		//					visible++;
+		//				}
+		//			}
+		//			if (property.isExpanded)
+		//				//Debug.Log($"hasChildren: {property.displayName}");
+		//			totalHeight += EditorGUI.GetPropertyHeight(property);
+		//		}
+		//		totalHeight -= EditorGUIUtility.singleLineHeight * (counter + visible);
+
+		//	}
+		//	return totalHeight;
+
+	
+		//}
 	}
 	//[CustomPropertyDrawer(typeof(FloatVal), true)]
 

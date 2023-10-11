@@ -7,41 +7,73 @@ using UnityEngine;
 namespace TGP.Utilities {
 	[CreateAssetMenu(fileName = "Transform", menuName = "ScriptableObjects/Tweenables/Values/Transform", order = 1)]
 
-	public class TransformSO : TweenableValueSo<Transform> {
+	public class TransformSO : TweenableValueSo2<Transform, TransformStorer> {
 		TransformSO() { }
-		public Vector3 OutPosition;
-		public Vector3 OutRotation;
-		public Vector3 OutScale= Vector3.one;
+		public TransformStorer Transforms;
+
 		public bool Pos;
 		public bool Rot;
 		public bool Scl;
 
-		public override Sequence GetTweenSequence(Transform transform, TweenCallback onComplete, bool isIn = true) {
-			Sequence sequ = DOTween.Sequence().SetAutoKill(false); 
-			if (isIn) {
-				if (Pos) {
-					sequ.Join(transform.DOMove(transform.position, Settings.InDuration).SetDelay(Settings.InDelay).SetEase(Settings.InEaseCurve));
-				}
-				if (Rot) {
-					sequ.Join(transform.DORotateQuaternion(transform.rotation, Settings.InDuration).SetDelay(Settings.InDelay).SetEase(Settings.InEaseCurve));
-				}
-				if (Scl) {
-					sequ.Join(transform.DOScale(transform.localScale, Settings.InDuration).SetDelay(Settings.InDelay).SetEase(Settings.InEaseCurve));
-				}
-			} else {
-				if (Pos) {
-					sequ.Join(transform.DOLocalMove(OutPosition, Settings.OutDuration).SetDelay(Settings.OutDelay).SetEase(Settings.OutEaseCurve));
-				}
-				if (Rot) {
-					sequ.Join(transform.DOLocalRotate(OutRotation, Settings.OutDuration).SetDelay(Settings.OutDelay).SetEase(Settings.OutEaseCurve));
-				}
-				if (Scl) {
-					sequ.Join(transform.DOScale(OutScale, Settings.OutDuration).SetDelay(Settings.OutDelay).SetEase(Settings.OutEaseCurve));
-				}
+		public override Sequence GetTweenSequenceIn(Transform property, TransformStorer value, TweenCallback onComplete) {
+			Sequence sequ = DOTween.Sequence().SetAutoKill(false);
+			if (Pos) {
+				sequ.Join(property.DOMove(value.Position, Settings.InDuration));
 			}
-			sequ.AppendCallback(onComplete);
+			if (Rot) {
+				sequ.Join(property.DORotateQuaternion(value.Rotation, Settings.InDuration));
+			}
+			if (Scl) {
+				sequ.Join(property.DOScale(value.Scale, Settings.InDuration));
+			}
+			sequ.SetDelay(Settings.InDelay).SetEase(Settings.InEaseCurve).AppendCallback(onComplete);
 			return sequ.Pause();
 		}
-		
+
+		public override Sequence GetTweenSequenceOut(Transform property, TransformStorer value, TweenCallback onComplete) {
+			Sequence sequ = DOTween.Sequence().SetAutoKill(false);
+			if (Pos) {
+				sequ.Join(property.DOMove(value.Position, Settings.OutDuration));
+			}
+			if (Rot) {
+				sequ.Join(property.DORotateQuaternion(value.Rotation, Settings.OutDuration));
+			}
+			if (Scl) {
+				sequ.Join(property.DOScale(value.Scale, Settings.OutDuration));
+			}
+			sequ.SetDelay(Settings.OutDelay).SetEase(Settings.OutEaseCurve).AppendCallback(onComplete);
+			return sequ.Pause();
+		}
 	}
+	[Serializable]
+	public class TransformStorer {
+		public Vector3 Position;
+		public Quaternion Rotation;
+		public Vector3 Scale = Vector3.one;
+		public TransformStorer(Transform tran) {
+			Position = tran.localPosition;
+			Rotation = tran.localRotation;
+			Scale = tran.localScale;
+		}
+	
+		public Transform StoredValToTransfom(Transform trans) {
+			trans.localPosition = Position;
+			trans.localRotation = Rotation;
+			trans.localScale = Scale;
+			return trans;
+		}
+	}
+	//public class TransformValuesContainer:BaseClassValueStore<Transform,TransformStorer> {
+	//	public TransformValuesContainer(Transform tran) : base(tran) { }
+
+	//	public override void SetTargetValue(TransformStorer targetVal) {
+	//		TargetValue = targetVal;	
+	//	}
+
+	//	public  override TransformStorer ConvertToStoreClass(Transform oriValue) {
+	//		OriValue = new TransformStorer(oriValue);
+	//		return OriValue;
+	//	}
+	//}
+	
 }

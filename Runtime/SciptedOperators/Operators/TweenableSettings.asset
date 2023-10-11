@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 941caac2c956c504ba9beabe2d2fe31a, type: 3}
   m_Name: TweenableSettings
   m_EditorClassIdentifier: 
-  InEaseCurve: 8
-  OutEaseCurve: 9
-  InDuration: 2
+  InEaseCurve: 9
+  OutEaseCurve: 8
+  InDuration: 1
   OutDuration: 2
   InDelay: 0
-  OutDelay: 0
+  OutDelay: 1

@@ -9,13 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9af39392996c2604a9b8799a7351f072, type: 3}
-  m_Name: Transform 1
+  m_Script: {fileID: 11500000, guid: a56248f0873a29a48b6c3455af24352d, type: 3}
+  m_Name: CanvasGroup
   m_EditorClassIdentifier: 
   Settings: {fileID: 11400000, guid: ecd19e6f6664f764abb3ed5c06c6f5b9, type: 2}
-  OutPosition: {x: 0, y: 0, z: 0}
-  OutRotation: {x: 45, y: 30, z: 90}
-  OutScale: {x: 2, y: 2, z: 2}
-  Pos: 1
-  Rot: 1
-  Scl: 1

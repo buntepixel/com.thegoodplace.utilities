@@ -13,9 +13,13 @@ MonoBehaviour:
   m_Name: Transform
   m_EditorClassIdentifier: 
   Settings: {fileID: 11400000, guid: ecd19e6f6664f764abb3ed5c06c6f5b9, type: 2}
-  OutPosition: {x: 3, y: 0, z: 0}
-  OutRotation: {x: 0, y: 0, z: 0}
-  OutScale: {x: 2, y: 1, z: 1}
+  Transforms:
+    Position: {x: 10, y: 5, z: 10}
+    Rotation: {x: 0.15370327, y: 0.17351045, z: 0.31491593, w: 0.9203789}
+    Scale: {x: 2, y: 1, z: 0.5}
+  OutPosition: {x: 10, y: 5, z: 10}
+  OutRotation: {x: 0.15370326, y: 0.17351037, z: 0.31491596, w: 0.9203789}
+  OutScale: {x: 2, y: 1, z: 0.5}
   Pos: 1
-  Rot: 0
+  Rot: 1
   Scl: 1

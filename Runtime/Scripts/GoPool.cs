@@ -64,11 +64,9 @@ namespace TGP.Utilities {
 		public GameObject GetPoolRoot() {
 			return poolObj.gameObject;
 			}
-		public override void Destroy() {
-			base.Destroy();
+
+		public override void Dispose() {
 			Object.Destroy(poolObj);
-			}
-
-
 		}
+	}
 	}
