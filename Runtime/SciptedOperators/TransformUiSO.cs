@@ -3,46 +3,49 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
-using UnityEditor;
+
 
 namespace TGP.Utilities {
 	[CreateAssetMenu(fileName = "TransformUi", menuName = "ScriptableObjects/Tweenables/Values/TransformUi", order = 2)]
 
-	public class TransformUiSO : TweenableValueSo<RectTransform> {
+	public class TransformUiSO : TweenableValueSo2<RectTransform, RectTransformStore> {
 
 		TransformUiSO() { }
 		public RectTransformStore rectStore;
-		public override Sequence GetTweenSequence(RectTransform rect, TweenCallback onComplete, bool isIn = true) {
-			Sequence sequ = DOTween.Sequence().SetAutoKill(false);
-				sequ.Join(rect.DOAnchorPos3D(rectStore.Position, Settings.InDuration).SetDelay(Settings.InDelay).SetEase(Settings.InEaseCurve));
-				sequ.Join(rect.DOSizeDelta(rectStore.Width_Height, Settings.InDuration).SetDelay(Settings.InDelay).SetEase(Settings.InEaseCurve));
-				sequ.Join(rect.DOAnchorMin(rectStore.Min, Settings.InDuration).SetDelay(Settings.InDelay).SetEase(Settings.InEaseCurve));
-				sequ.Join(rect.DOAnchorMax(rectStore.Max, Settings.InDuration).SetDelay(Settings.InDelay).SetEase(Settings.InEaseCurve));
-				sequ.Join(rect.DOPivot(rectStore.Pivot, Settings.InDuration).SetDelay(Settings.InDelay).SetEase(Settings.InEaseCurve));
-				sequ.Join(rect.DORotateQuaternion(Quaternion.Euler(rectStore.Rotation), Settings.InDuration).SetDelay(Settings.InDelay).SetEase(Settings.InEaseCurve));
-				sequ.Join(rect.DOScale(rectStore.Scale, Settings.InDuration).SetDelay(Settings.InDelay).SetEase(Settings.InEaseCurve));
-			sequ.AppendCallback(onComplete);
-			return sequ.Pause();
-		}
-		public  Sequence GetTweenSequence(RectTransform rect, RectTransformStore rectStore,TweenCallback onComplete) {
-			Sequence sequ = DOTween.Sequence().SetAutoKill(false);
-			sequ.Join(rect.DOAnchorPos3D(rectStore.Position, Settings.OutDuration).SetDelay(Settings.OutDelay).SetEase(Settings.OutEaseCurve));
-			sequ.Join(rect.DOSizeDelta(rectStore.Width_Height, Settings.OutDuration).SetDelay(Settings.OutDelay).SetEase(Settings.OutEaseCurve));
-			sequ.Join(rect.DOAnchorMin(rectStore.Min, Settings.OutDuration).SetDelay(Settings.OutDelay).SetEase(Settings.OutEaseCurve));
-			sequ.Join(rect.DOAnchorMax(rectStore.Max, Settings.OutDuration).SetDelay(Settings.OutDelay).SetEase(Settings.OutEaseCurve));
-			sequ.Join(rect.DOPivot(rectStore.Pivot, Settings.OutDuration).SetDelay(Settings.OutDelay).SetEase(Settings.OutEaseCurve));
-			sequ.Join(rect.DORotateQuaternion(Quaternion.Euler(rectStore.Rotation), Settings.OutDuration).SetDelay(Settings.OutDelay).SetEase(Settings.OutEaseCurve));
-			sequ.Join(rect.DOScale(rectStore.Scale, Settings.OutDuration).SetDelay(Settings.OutDelay).SetEase(Settings.OutEaseCurve));
 
+		public override Sequence GetTweenSequenceIn(RectTransform property, RectTransformStore value, TweenCallback onComplete) {
+			Sequence sequ = DOTween.Sequence().SetAutoKill(false);
+			sequ.Join(property.DOAnchorPos3D(value.Position, Settings.InDuration));
+			sequ.Join(property.DOSizeDelta(value.Width_Height, Settings.InDuration));
+			sequ.Join(property.DOAnchorMin(value.Min, Settings.InDuration));
+			sequ.Join(property.DOAnchorMax(value.Max, Settings.InDuration));
+			sequ.Join(property.DOPivot(value.Pivot, Settings.InDuration));
+			sequ.Join(property.DORotateQuaternion(Quaternion.Euler(value.Rotation), Settings.InDuration));
+			sequ.Join(property.DOScale(value.Scale, Settings.InDuration));
+
+			sequ.SetDelay(Settings.InDelay).SetEase(Settings.InEaseCurve);//sequ delay
 			sequ.AppendCallback(onComplete);
 			return sequ.Pause();
 		}
 
+		public override Sequence GetTweenSequenceOut(RectTransform property, RectTransformStore value, TweenCallback onComplete) {
+			Sequence sequ = DOTween.Sequence().SetAutoKill(false);
+			sequ.Join(property.DOAnchorPos3D(value.Position, Settings.OutDuration));
+			sequ.Join(property.DOSizeDelta(value.Width_Height, Settings.OutDuration));
+			sequ.Join(property.DOAnchorMin(value.Min, Settings.OutDuration));
+			sequ.Join(property.DOAnchorMax(value.Max, Settings.OutDuration));
+			sequ.Join(property.DOPivot(value.Pivot, Settings.OutDuration));
+			sequ.Join(property.DORotateQuaternion(Quaternion.Euler(value.Rotation), Settings.OutDuration));
+			sequ.Join(property.DOScale(value.Scale, Settings.OutDuration));
 
+			sequ.SetDelay(Settings.OutDelay).SetEase(Settings.OutEaseCurve);//sequ delay
+			sequ.AppendCallback(onComplete);
+			return sequ.Pause();
+		}
 	}
 	[Serializable]
 	public class RectTransformStore {
-	
+
 		public Vector3 Position;
 		public Vector2 Width_Height;
 		[Header("Anchors")]
@@ -62,14 +65,14 @@ namespace TGP.Utilities {
 			Scale = rect.localScale;
 		}
 
-		public RectTransformStore(Vector3 pos, Vector2 width_height, Vector2 min, Vector2 max, Vector2 pivot, Vector3 rot, Vector3 scl) {
-			Position = pos;
-			Width_Height = width_height;
-			Min = min;
-			Max = max;
-			Pivot = pivot;
-			Rotation = rot;
-			Scale = scl;
-		}
+		//public RectTransformStore(Vector3 pos, Vector2 width_height, Vector2 min, Vector2 max, Vector2 pivot, Vector3 rot, Vector3 scl) {
+		//	Position = pos;
+		//	Width_Height = width_height;
+		//	Min = min;
+		//	Max = max;
+		//	Pivot = pivot;
+		//	Rotation = rot;
+		//	Scale = scl;
+		//}
 	}
 }
