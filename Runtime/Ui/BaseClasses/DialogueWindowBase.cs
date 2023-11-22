@@ -22,19 +22,20 @@ namespace TGP.Utilities.Ui {
 		[SerializeField]
 		AnimationType TypeOfAnimation;
 		[SerializeField]
-		protected Vector2 In_Out_Value;
+		[Tooltip("if animated In/Out")]
+		protected Vector2 In_Out_Value ;
 	
 		CanvasGroup cg;
 		protected virtual void Awake() {
 			cg = GetComponent<CanvasGroup>();
 			}
 		protected virtual void Start() {
+			cg.EnableInputVisibility(false);
 			switch (TypeOfAnimation) {
 				case AnimationType.fade:
-					cg.EnableInputVisibility(false);
+					In_Out_Value = new Vector2 (1, 0);
 					break;
 				case AnimationType.moveRtL:
-					cg.EnableInputVisibility(false);
 					Mover.anchoredPosition = new Vector2(In_Out_Value.y, Mover.anchoredPosition.y);
 					//Debug.LogFormat($" seting mover to: {Mover.anchoredPosition} ioVal: {In_Out_Value}");
 					break;
