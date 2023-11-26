@@ -5,7 +5,7 @@ using UnityEditor;
 using System.Linq;
 using TGP.Utilities;
 using System.Text.RegularExpressions;
-
+#if UNITY_EDITOR
 namespace TGP.Utilities.Editor {
 	//[CustomPropertyDrawer(typeof(MaterialValueGroup), true)]
 	public class MaterialValueGroupDrawer : PropertyDrawer {
@@ -123,3 +123,4 @@ namespace TGP.Utilities.Editor {
 
 	//}
 }
+#endif
