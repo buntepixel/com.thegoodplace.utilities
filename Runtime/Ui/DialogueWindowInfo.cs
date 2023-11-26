@@ -1,15 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using TMPro;
-using DG.Tweening;
 
 namespace TGP.Utilities.Ui {
-    public class DialogueWindowInfo : DialogueWindowBase {
+	public class DialogueWindowInfo : DialogueWindowBase {
 		public delegate void DialogueWindow_delegate(System.Object sender, DialogueWindowBaseEventArgs context);
 		public static DialogueWindow_delegate OnOpenDialogueWindow;
 		public static DialogueWindow_delegate OnCloseDialogueWindow;
