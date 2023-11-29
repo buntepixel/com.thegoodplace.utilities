@@ -18,18 +18,18 @@ namespace TGP.Utilities.Ui {
 
 		protected override void Awake() {
 			base.Awake();
-			if (headline == null || message == null )
+			if (headline == null || message == null)
 				Debug.LogError($" Serialized Fields are empty on Obj: {this.gameObject.name}");
 			if (confirm == null)
 				Debug.LogError($" no Button Assigned on Obj: {this.gameObject.name}");
 			else
 				confirmText = confirm.GetComponentInChildren<TMP_Text>();
 			confirm.onClick.AddListener(() => CloseWindow(this, new DialogueWindowBaseEventArgs()));
-			}
+		}
 		private void OnEnable() {
 			OnOpenDialogueWindow = OpenWindow;
 			OnCloseDialogueWindow = CloseWindow;
-			}
+		}
 
 		protected override void OpenWindow(object sender, DialogueWindowBaseEventArgs args) {
 			if (args == null)
@@ -38,35 +38,39 @@ namespace TGP.Utilities.Ui {
 			DialogueWindowInfoEventArgs myArgs = new DialogueWindowInfoEventArgs();
 			try {
 				myArgs = args as DialogueWindowInfoEventArgs;
-				}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				Debug.LogError(ex.Message);
-				}
-			confirmText.text = myArgs.ConfirmBtnText;
-			confirm.gameObject.SetActive(myArgs.Confirm);
+			}
+		
 			headline.text = myArgs.Headline;
 			message.text = myArgs.Message;
-			if (!myArgs.Confirm)
+			bool showButton = !myArgs.Confirm && myArgs.ConfirmBtnText != string.Empty;
+			confirmText.text = myArgs.ConfirmBtnText;
+			confirm.gameObject.SetActive(showButton);
+	
+			if (showButton) {
+				
 				AutoHide(args);
 			}
+				
 		}
-	public class DialogueWindowInfoEventArgs: DialogueWindowBaseEventArgs  {
+	}
+	public class DialogueWindowInfoEventArgs : DialogueWindowBaseEventArgs {
 		public DialogueWindowInfoEventArgs() {
 
-			}
-		public DialogueWindowInfoEventArgs(string headline, string message, bool confirm = false, string confirmBtnMessage = "Ok") :base()
-			{
+		}
+		public DialogueWindowInfoEventArgs(string headline, string message, bool confirm = false, string confirmBtnMessage = "Ok") : base() {
 			Confirm = confirm;
 			ConfirmBtnText = confirmBtnMessage;
 			if (!Confirm)
 				DisplayDuration = 5;
 			Headline = headline;
 			Message = message;
-			}
+		}
 		public string ConfirmBtnText { get; set; }
 		public bool Confirm { get; set; }
 		public string Headline { get; set; }
 		public string Message { get; set; }
-		
-		}
+
 	}
+}
