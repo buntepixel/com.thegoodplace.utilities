@@ -40,20 +40,14 @@ namespace TGP.Utilities.Ui {
 				myArgs = args as DialogueWindowInfoEventArgs;
 			} catch (Exception ex) {
 				Debug.LogError(ex.Message);
-			}
-		
+				}
+			confirmText.text = myArgs.ConfirmBtnText;
+			confirm.gameObject.SetActive(myArgs.Confirm&& myArgs.ConfirmBtnText!=string.Empty);
 			headline.text = myArgs.Headline;
 			message.text = myArgs.Message;
-			bool showButton = !myArgs.Confirm && myArgs.ConfirmBtnText != string.Empty;
-			confirmText.text = myArgs.ConfirmBtnText;
-			confirm.gameObject.SetActive(showButton);
-	
-			if (showButton) {
-				
+			if (!myArgs.Confirm)
 				AutoHide(args);
 			}
-				
-		}
 	}
 	public class DialogueWindowInfoEventArgs : DialogueWindowBaseEventArgs {
 		public DialogueWindowInfoEventArgs() {
