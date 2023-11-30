@@ -5,6 +5,9 @@ using System.IO;
 using System;
 using System.Threading;
 using System.Globalization;
+using PlasticGui.Configuration.CloudEdition.Welcome;
+using System.Xml.Serialization;
+using System.Linq;
 
 
 
@@ -13,18 +16,20 @@ namespace TGP.Utilities {
 		[SerializeField]
 		public LogLevel _LogLevel;
 		[SerializeField]
+		int LogFilesToKeep=10;
+		[SerializeField]
 		string Filepath;
-	
+		[Flags]
 		public enum LogLevel {
 			none = 0,
-			Errors = 1,
-			Warnings = 2,
-			Information = 4,
-			everything = 8
+			Errors = 1 << 0,
+			Warnings = 1 << 1,
+			Information = 1 << 2,
+			Exeption = 1 << 3
 		}
 		Logger logger;
 		private void Awake() {
-			logger = new Logger();
+			logger = new Logger(LogFilesToKeep);
 			Logger.CreateAppLogFile();
 			if (debug)
 				logger.debug = debug;
@@ -42,72 +47,40 @@ namespace TGP.Utilities {
 		}
 
 		void LogCallbacksToFile(string condition, string stacktrace, LogType logtype) {
-
-			switch (_LogLevel) {
-
-				case LogLevel.Errors:
-					LogErrors(condition,stacktrace,logtype);
+			switch (logtype) {
+				case LogType.Error:
+					if (_LogLevel.HasFlag(LogLevel.Errors))
+						LogErrors(condition, stacktrace, logtype);
 					break;
-				case LogLevel.Warnings:
-					LogErrors(condition, stacktrace, logtype);
-					LogWarnings(condition, stacktrace, logtype);
+				case LogType.Assert:
 					break;
-				case LogLevel.Information:
-					LogErrors(condition, stacktrace, logtype);
-					LogWarnings(condition, stacktrace, logtype);
-					LogInformation(condition, stacktrace, logtype);
+				case LogType.Warning:
+					if (_LogLevel.HasFlag(LogLevel.Warnings))
+						LogWarnings(condition, stacktrace, logtype);
 					break;
-				case LogLevel.everything:
-					LogErrors(condition, stacktrace, logtype);
-					LogWarnings(condition, stacktrace, logtype);
-					LogInformation(condition, stacktrace, logtype);
-					LogEverything(condition, stacktrace, logtype);
-
+				case LogType.Log:
+					if (_LogLevel.HasFlag(LogLevel.Information))
+						LogInformation(condition, stacktrace, logtype);
+					break;
+				case LogType.Exception:
+					if (_LogLevel.HasFlag(LogLevel.Exeption))
+						LogException(condition, stacktrace, logtype);
 					break;
 				default:
 					break;
 			}
-
-			//switch (logtype) {
-			//	case LogType.Error:
-			//		if (_LogLevel.HasFlag(LogLevel.Errors))
-			//			Logger.WriteLogEntry(condition, logtype, stacktrace);
-			//		break;
-			//	case LogType.Assert:
-			//		if (_LogLevel.HasFlag(LogLevel.everything))
-			//			Logger.WriteLogEntry(condition, logtype);
-			//		break;
-			//	case LogType.Warning:
-			//		if (_LogLevel.HasFlag(LogLevel.Warnings))
-			//			Logger.WriteLogEntry(condition, logtype);
-			//		break;
-			//	case LogType.Log:
-			//		if (_LogLevel.HasFlag(LogLevel.Information))
-			//			Logger.WriteLogEntry(condition, logtype);
-			//		break;
-			//	case LogType.Exception:
-			//		if (_LogLevel.HasFlag(LogLevel.Errors))
-			//			Logger.WriteLogEntry(condition, logtype, stacktrace);
-			//		break;
-			//	default:
-			//		break;
-			//}
 		}
 		void LogErrors(string condition, string stacktrace, LogType logtype) {
-			if (logtype == LogType.Error || logtype == LogType.Exception)
 				Logger.WriteLogEntry(condition, logtype, stacktrace);
 		}
 		void LogWarnings(string condition, string stacktrace, LogType logtype) {
-			if (logtype == LogType.Warning)
 				Logger.WriteLogEntry(condition, logtype);
 		}
 		void LogInformation(string condition, string stacktrace, LogType logtype) {
-			if (logtype == LogType.Log)
 				Logger.WriteLogEntry(condition, logtype);
 		}
-		void LogEverything(string condition, string stacktrace, LogType logtype) {
-			if (logtype == LogType.Assert)
-				Logger.WriteLogEntry(condition, logtype);
+		void LogException(string condition, string stacktrace, LogType logtype) {
+				Logger.WriteLogEntry(condition, logtype, stacktrace);
 		}
 		public void SetBit(int bitNr) {
 			byte tmp = (byte)_LogLevel;
@@ -125,9 +98,10 @@ namespace TGP.Utilities {
 		public bool debug;
 		public static string CurrLogFilePath { get; private set; }
 		static ReaderWriterLockSlim lock_ = new ReaderWriterLockSlim();
-		public Logger() {
+		public Logger(int filesToKeep) {
 			CurrLogFilePath = string.Concat(Application.persistentDataPath, "/_", DateTime.Now.ToString("yyMMdd"), "_Logfile", ".txt");
 			CheckIfDirExists(CurrLogFilePath);
+			DeleteOldFiles(filesToKeep);
 		}
 		void CheckIfDirExists(string dir) {
 			if (debug)
@@ -147,6 +121,10 @@ namespace TGP.Utilities {
 					currLogFile.WriteLine(String.Concat("Logfile created:", DateTime.Now.ToString("G", DateTimeFormatInfo.InvariantInfo)));
 				}
 			}
+		}
+		void DeleteOldFiles(int keep) {
+			foreach (var fi in new DirectoryInfo(Application.persistentDataPath).GetFiles().OrderByDescending(x => x.LastWriteTime).Skip(keep))
+				fi.Delete();
 		}
 		public static void WriteLogEntry(string inputString, LogType logType, string stacktracke = "") {
 			lock_.EnterWriteLock();
