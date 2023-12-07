@@ -75,7 +75,7 @@ namespace TGP.Utilities.Ui {
 		/// </summary>
 		public int CurrentOption { get; private set; }
 		protected virtual void Awake() {
-			m_menuElemPool = new GoPool(m_DropdownParent.gameObject, m_Template.gameObject, "MenueElem_Pool");
+			m_menuElemPool = new GoPool(m_DropdownParent, m_Template.gameObject, "MenueElem_Pool");
 			m_MenuItems = new List<GameObject>();
 			}
 
