@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using TMPro;
 using UnityEngine;
 
 
@@ -12,9 +13,11 @@ namespace TGP.Utilities {
 		[SerializeField]
 		public LogLevel _LogLevel;
 		[SerializeField]
-		int LogFilesToKeep=10;
+		int LogFilesToKeep = 10;
 		[SerializeField]
 		string Filepath;
+		[SerializeField]
+		TMP_Text ErrorTextfield;
 		[Flags]
 		public enum LogLevel {
 			none = 0,
@@ -24,7 +27,8 @@ namespace TGP.Utilities {
 			Exeption = 1 << 3
 		}
 		Logger logger;
-		private void Awake() {
+		protected override void Awake() {
+			base.Awake();
 			logger = new Logger(LogFilesToKeep);
 			Logger.CreateAppLogFile();
 			if (debug)
@@ -45,6 +49,7 @@ namespace TGP.Utilities {
 		void LogCallbacksToFile(string condition, string stacktrace, LogType logtype) {
 			switch (logtype) {
 				case LogType.Error:
+					LogToWindow(condition, stacktrace);
 					if (_LogLevel.HasFlag(LogLevel.Errors))
 						LogErrors(condition, stacktrace, logtype);
 					break;
@@ -59,6 +64,7 @@ namespace TGP.Utilities {
 						LogInformation(condition, stacktrace, logtype);
 					break;
 				case LogType.Exception:
+					LogToWindow(condition, stacktrace);
 					if (_LogLevel.HasFlag(LogLevel.Exeption))
 						LogException(condition, stacktrace, logtype);
 					break;
@@ -66,17 +72,26 @@ namespace TGP.Utilities {
 					break;
 			}
 		}
+		void LogToWindow(string condition, string stacktrace) {
+			if (ErrorTextfield == null)
+				return;
+			CanvasGroup cg = ErrorTextfield.GetComponentInParent<CanvasGroup>();
+			if(cg!= null) {
+				cg.EnableInputVisibility(true);
+			}
+			ErrorTextfield.text = string.Concat(condition, "\n--------------\n", stacktrace);
+		}
 		void LogErrors(string condition, string stacktrace, LogType logtype) {
-				Logger.WriteLogEntry(condition, logtype, stacktrace);
+			Logger.WriteLogEntry(condition, logtype, stacktrace);
 		}
 		void LogWarnings(string condition, string stacktrace, LogType logtype) {
-				Logger.WriteLogEntry(condition, logtype);
+			Logger.WriteLogEntry(condition, logtype);
 		}
 		void LogInformation(string condition, string stacktrace, LogType logtype) {
-				Logger.WriteLogEntry(condition, logtype);
+			Logger.WriteLogEntry(condition, logtype);
 		}
 		void LogException(string condition, string stacktrace, LogType logtype) {
-				Logger.WriteLogEntry(condition, logtype, stacktrace);
+			Logger.WriteLogEntry(condition, logtype, stacktrace);
 		}
 		public void SetBit(int bitNr) {
 			byte tmp = (byte)_LogLevel;
