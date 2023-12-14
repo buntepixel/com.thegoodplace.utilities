@@ -34,26 +34,29 @@ namespace TGP.Utilities.Ui {
 		protected override void OpenWindow(object sender, DialogueWindowBaseEventArgs args) {
 			if (args == null)
 				return;
-			base.OpenWindow(sender, args);
 			DialogueWindowInfoEventArgs myArgs = new DialogueWindowInfoEventArgs();
 			try {
 				myArgs = args as DialogueWindowInfoEventArgs;
 			} catch (Exception ex) {
 				Debug.LogError(ex.Message);
 				}
+			if (isOpen) {
+				Debug.LogWarning($"Window already open, change text from:\n{message.text}\nto\n{myArgs.Message}");
+			}
+			base.OpenWindow(sender, myArgs);
 			confirmText.text = myArgs.ConfirmBtnText;
 			confirm.gameObject.SetActive(myArgs.Confirm&& myArgs.ConfirmBtnText!=string.Empty);
 			headline.text = myArgs.Headline;
 			message.text = myArgs.Message;
 			if (!myArgs.Confirm)
-				AutoHide(args);
+				AutoHide(myArgs);
 			}
 	}
 	public class DialogueWindowInfoEventArgs : DialogueWindowBaseEventArgs {
 		public DialogueWindowInfoEventArgs() {
 
 		}
-		public DialogueWindowInfoEventArgs(string headline, string message, bool confirm = false, string confirmBtnMessage = "Ok") : base() {
+		public DialogueWindowInfoEventArgs(string headline, string message, bool confirm = false, string confirmBtnMessage = "Ok") : base(3) {
 			Confirm = confirm;
 			ConfirmBtnText = confirmBtnMessage;
 			if (!Confirm)

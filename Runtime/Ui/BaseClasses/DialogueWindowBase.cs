@@ -24,9 +24,10 @@ namespace TGP.Utilities.Ui {
 		[SerializeField]
 		[Tooltip("if animated In/Out")]
 		protected Vector2 In_Out_Value;
-		protected bool isOpen;
+		public static bool isOpen { get;protected set; }
 		CanvasGroup cg;
-		protected virtual void Awake() {
+		protected override void Awake() {
+			base.Awake();
 			cg = GetComponent<CanvasGroup>();
 		}
 		protected virtual void Start() {
@@ -48,18 +49,17 @@ namespace TGP.Utilities.Ui {
 		protected virtual void OpenWindow(System.Object sender, DialogueWindowBaseEventArgs args) {
 			if (debug)
 				Debug.LogFormat($"DiaogueWindowBase---OpenWindow: on:{this.gameObject.name}");
-
 			if (!isOpen)
 				ButtonAnimation(In_Out_Value.x, args, TypeOfAnimation);
+			
 			isOpen = true;
 		}
 
 		protected virtual void CloseWindow(System.Object sender, DialogueWindowBaseEventArgs args) {
-			if (debug)
+			if (this.gameObject!=null &&debug)
 				Debug.LogFormat($"DiaogueWindowBase---CloseWindow: on:{this.gameObject.name}");
 			ButtonAnimation(In_Out_Value.y, args, TypeOfAnimation);
 			isOpen = false;
-
 		}
 
 		protected async void AutoHide(DialogueWindowBaseEventArgs args) {
@@ -90,7 +90,12 @@ namespace TGP.Utilities.Ui {
 
 	public class DialogueWindowBaseEventArgs : EventArgs {
 		public DialogueWindowBaseEventArgs() {
-			TweenDuration = 0.3f;
+			TweenDuration = 0.1f;
+			
+		}
+
+		public DialogueWindowBaseEventArgs(int displayDuration):base() {
+			DisplayDuration = displayDuration;
 		}
 
 		public float TweenDuration { get; set; }
