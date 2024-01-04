@@ -30,6 +30,7 @@ namespace TGP.Utilities {
 		protected override void Awake() {
 			base.Awake();
 			logger = new Logger(LogFilesToKeep);
+			
 			Logger.CreateAppLogFile();
 			if (debug)
 				logger.debug = debug;
@@ -76,7 +77,7 @@ namespace TGP.Utilities {
 			if (ErrorTextfield == null)
 				return;
 			CanvasGroup cg = ErrorTextfield.GetComponentInParent<CanvasGroup>();
-			if(cg!= null) {
+			if (cg != null) {
 				cg.EnableInputVisibility(true);
 			}
 			ErrorTextfield.text = string.Concat(condition, "\n--------------\n", stacktrace);
@@ -107,10 +108,11 @@ namespace TGP.Utilities {
 	public class Logger {
 		static int counter;
 		public bool debug;
+		
 		public static string CurrLogFilePath { get; private set; }
 		static ReaderWriterLockSlim lock_ = new ReaderWriterLockSlim();
 		public Logger(int filesToKeep) {
-			CurrLogFilePath = string.Concat(Application.persistentDataPath, "/_", DateTime.Now.ToString("yyMMdd"), "_Logfile", ".txt");
+			CurrLogFilePath = string.Concat(Application.persistentDataPath, "/_", DateTime.Now.ToString("yyMMdd"), "_Logfile", "_", Application.productName, ".txt");
 			CheckIfDirExists(CurrLogFilePath);
 			DeleteOldFiles(filesToKeep);
 		}
