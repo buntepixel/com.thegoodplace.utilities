@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -30,11 +31,11 @@ namespace TGP.Utilities {
 		protected override void Awake() {
 			base.Awake();
 			logger = new Logger(LogFilesToKeep);
-			
-			Logger.CreateAppLogFile();
+
+			logger.CreateAppLogFile();
 			if (debug)
 				logger.debug = debug;
-			Filepath = Logger.CurrLogFilePath;
+			Filepath = logger.CurrLogFilePath;
 		}
 
 		private void OnEnable() {
@@ -44,7 +45,7 @@ namespace TGP.Utilities {
 			Application.logMessageReceived -= LogCallbacksToFile;
 		}
 		private void OnDestroy() {
-			Logger.WriteLogEntry("-----------------App Closed--------------\n\n", LogType.Warning);
+			logger.WriteLogEntry("-----------------App Closed--------------\n\n", LogType.Warning);
 		}
 
 		void LogCallbacksToFile(string condition, string stacktrace, LogType logtype) {
@@ -83,16 +84,16 @@ namespace TGP.Utilities {
 			ErrorTextfield.text = string.Concat(condition, "\n--------------\n", stacktrace);
 		}
 		void LogErrors(string condition, string stacktrace, LogType logtype) {
-			Logger.WriteLogEntry(condition, logtype, stacktrace);
+			logger.WriteLogEntry(condition, logtype, stacktrace);
 		}
 		void LogWarnings(string condition, string stacktrace, LogType logtype) {
-			Logger.WriteLogEntry(condition, logtype);
+			logger.WriteLogEntry(condition, logtype);
 		}
 		void LogInformation(string condition, string stacktrace, LogType logtype) {
-			Logger.WriteLogEntry(condition, logtype);
+			logger.WriteLogEntry(condition, logtype);
 		}
 		void LogException(string condition, string stacktrace, LogType logtype) {
-			Logger.WriteLogEntry(condition, logtype, stacktrace);
+			logger.WriteLogEntry(condition, logtype, stacktrace);
 		}
 		public void SetBit(int bitNr) {
 			byte tmp = (byte)_LogLevel;
@@ -106,32 +107,40 @@ namespace TGP.Utilities {
 		}
 	}
 	public class Logger {
-		static int counter;
+		 int counter;
 		public bool debug;
 		
-		public static string CurrLogFilePath { get; private set; }
-		static ReaderWriterLockSlim lock_ = new ReaderWriterLockSlim();
-		public Logger(int filesToKeep) {
-			CurrLogFilePath = string.Concat(Application.persistentDataPath, "/_", DateTime.Now.ToString("yyMMdd"), "_Logfile", "_", Application.productName, ".txt");
+		public  string CurrLogFilePath { get; private set; }
+		ReaderWriterLockSlim lock_ = new ReaderWriterLockSlim();
+		public Logger(int filesToKeep):this(filesToKeep, string.Concat("/_", DateTime.Now.ToString("yyMMdd"), "_Logfile", "_", Application.productName)) {
+		
+		}
+		public Logger(int filesToKeep, string filename, bool includeDate = false,string fileEnding= ".txt") {
+			CurrLogFilePath = string.Concat(Application.persistentDataPath,filename,includeDate==true? DateTime.Now.ToString("yyMMdd"):"", fileEnding);
 			CheckIfDirExists(CurrLogFilePath);
 			DeleteOldFiles(filesToKeep);
 		}
 		void CheckIfDirExists(string dir) {
 			if (debug)
-				Debug.LogFormat($"dirIn: {dir}");
+				UnityEngine.Debug.LogFormat($"dirIn: {dir}");
 			string dirOnly = Path.GetDirectoryName(dir);
 
 
 			if (!Directory.Exists(dirOnly))
 				Directory.CreateDirectory(dirOnly);
 		}
-		public static void CreateAppLogFile() {
+		public  void CreateAppLogFile() {
 			counter = 0;
 			StreamWriter currLogFile;
 			if (!File.Exists(CurrLogFilePath)) {
 				//todo:make sure old files get deleted
-				using (currLogFile = File.CreateText(CurrLogFilePath)) {
+				//using (currLogFile = File.CreateText(CurrLogFilePath)) {
+				//	currLogFile.WriteLine(String.Concat("Logfile created:", DateTime.Now.ToString("G", DateTimeFormatInfo.InvariantInfo)));
+				//	currLogFile.Close();
+				//}
+				using (currLogFile = new StreamWriter(CurrLogFilePath,false)) {
 					currLogFile.WriteLine(String.Concat("Logfile created:", DateTime.Now.ToString("G", DateTimeFormatInfo.InvariantInfo)));
+					currLogFile.Close();
 				}
 			}
 		}
@@ -139,7 +148,7 @@ namespace TGP.Utilities {
 			foreach (var fi in new DirectoryInfo(Application.persistentDataPath).GetFiles().OrderByDescending(x => x.LastWriteTime).Skip(keep))
 				fi.Delete();
 		}
-		public static void WriteLogEntry(string inputString, LogType logType, string stacktracke = "") {
+		public  void WriteLogEntry(string inputString, LogType logType, string stacktracke = "") {
 			lock_.EnterWriteLock();
 			try {
 				using (StreamWriter currLogFile = File.AppendText(CurrLogFilePath)) {
@@ -150,10 +159,13 @@ namespace TGP.Utilities {
 					counter++;
 				}
 			} catch (Exception ex) {
-				Debug.LogWarningFormat("error whilewriting Log   Message:{0}", ex);
+				UnityEngine.Debug.LogWarningFormat("error whilewriting Log   Message:{0}", ex);
 			} finally {
 				lock_.ExitWriteLock();
 			}
+		}
+		public  void WriteLogEntry(string inputString) {
+			WriteLogEntry(inputString, LogType.Log);
 		}
 	}
 
