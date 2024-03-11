@@ -4,16 +4,13 @@ using UnityEngine;
 
 namespace TGP.Utilities {
 	public class GoPool : BasePool<GameObject> {
-		GameObject poolObj;
-		GameObject instanceObj;
-		List<GameObject> activeObj;
-		public GoPool(GameObject poolParent,GameObject instanceObj,string poolName = "pool") {
-			poolObj = new GameObject(poolName);
-			poolObj.transform.SetParent(poolParent.transform,false);
-			this.instanceObj = instanceObj;
-			activeObj = new List<GameObject>();
-			}
 	
+		List<GameObject> activeObj;
+
+		public GoPool(Transform poolParent, GameObject instanceObj, string poolName = "pool") : base(poolParent, instanceObj, poolName) {
+			activeObj = new List<GameObject>();
+		}
+
 		/// <summary>
 		/// Adds an Item to the pool and deactivates it.
 		/// </summary>

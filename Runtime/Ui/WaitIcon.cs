@@ -20,7 +20,7 @@ namespace TGP.Utilities.Ui {
 		[SerializeField]
 		float MovesPerSec = 3;
 
-		bool active;
+		public bool active { get; private set; }
 		List<System.Object> dispatchlist;
 		float animTimer;
 

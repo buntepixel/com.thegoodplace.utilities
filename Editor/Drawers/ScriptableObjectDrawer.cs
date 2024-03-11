@@ -1,51 +1,47 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+#if UNITY_EDITOR
 namespace TGP.Utilities.Editor {
-
-
-    //https://forum.unity.com/threads/editor-tool-better-scriptableobject-inspector-editing.484393/
-    [CustomPropertyDrawer(typeof(ScriptableObject), true)]
+    [UnityEditor.CustomPropertyDrawer(typeof(ScriptableObject), true)]
     public class ScriptableObjectDrawer : PropertyDrawer {
+        // Static foldout dictionary
+        private static Dictionary<System.Type, bool> foldoutByType = new Dictionary<System.Type, bool>();
+
         // Cached scriptable object editor
-       UnityEditor.Editor editor = null;
+        private UnityEditor.Editor editor = null;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
             // Draw label
             EditorGUI.PropertyField(position, property, label, true);
 
             // Draw foldout arrow
+            bool foldout = false;
             if (property.objectReferenceValue != null) {
-                property.isExpanded = EditorGUI.Foldout(position, property.isExpanded, GUIContent.none);
+                // Store foldout values in a dictionary per object type
+                bool foldoutExists = foldoutByType.TryGetValue(property.objectReferenceValue.GetType(), out foldout);
+                foldout = EditorGUI.Foldout(position, foldout, GUIContent.none);
+                if (foldoutExists)
+                    foldoutByType[property.objectReferenceValue.GetType()] = foldout;
+                else
+                    foldoutByType.Add(property.objectReferenceValue.GetType(), foldout);
             }
 
             // Draw foldout properties
-            if (property.isExpanded) {
+            if (foldout) {
                 // Make child fields be indented
                 EditorGUI.indentLevel++;
 
-                // background
-                GUILayout.BeginVertical("box");
-
+                // Draw object properties
                 if (!editor)
                     UnityEditor.Editor.CreateCachedEditor(property.objectReferenceValue, null, ref editor);
-
-                // Draw object properties
-                EditorGUI.BeginChangeCheck();
-                if (editor) // catch empty property
-                {
-                    editor.OnInspectorGUI();
-                }
-                if (EditorGUI.EndChangeCheck())
-                    property.serializedObject.ApplyModifiedProperties();
-
-                GUILayout.EndVertical();
+                editor.OnInspectorGUI();
 
                 // Set indent back to what it was
                 EditorGUI.indentLevel--;
             }
         }
     }
-
 }
+#endif
