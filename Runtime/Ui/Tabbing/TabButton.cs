@@ -7,14 +7,17 @@ using UnityEngine.UI;
 
 namespace TGP.Utilities.Ui {
 	[RequireComponent(typeof(Image))]
-	public class TabButton : BaseMonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPointerExitHandler {
-		
+	public class TabButton : BaseMonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler {
+
 		public TabGroup TabGroup;
 		public Image Backgroud;
 		public UnityEvent OnClick;
 		protected override void Awake() {
 			base.Awake();
 			Backgroud = GetComponent<Image>();
+			if (TabGroup == null) {
+				TabGroup = GetComponentInParent<TabGroup>();
+			}
 		}
 
 		private void OnEnable() {
@@ -39,7 +42,7 @@ namespace TGP.Utilities.Ui {
 			TabGroup.OnTabExit(this);
 		}
 
-		
+
 
 	}
 }

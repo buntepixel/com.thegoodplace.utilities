@@ -14,7 +14,7 @@ namespace TGP.Utilities.Ui {
 
 		
 		TabButton selected;
-		private void Start() {
+		protected virtual void Start() {
 			OnTabSelected(StartTab);
 		}
 		public void Subscribe(TabButton button) {
