@@ -16,6 +16,8 @@ namespace TGP.Utilities {
 			base.Awake();
 			_rectTransform = GetComponent<RectTransform>();
 			_canvas = GetComponent<Canvas>();
+			if(_canvas==null )
+				_canvas = GetComponentInParent<Canvas>();
 			canvasGroups = GetComponentsInChildren<CanvasGroup>();
 		}
 		private void Start() {
